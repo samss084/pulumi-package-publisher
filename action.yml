@@ -22,11 +22,11 @@ inputs:
 
           sdk: nodejs,python
 
-      To enable all languages (the default), specify 'all':
+      To enable all languages (the default), specify 'all':All
 
           sdk: all
 
-      To disable only a single language (but enable all others), use:
+      To disable only a single language (but enable all others), use:null
 
           sdk: all,!nodejs
 
@@ -46,15 +46,15 @@ runs:
   steps:
     - name: Verify input
       run: echo 'Publishing SDK:' && echo ${{ inputs.sdk }}
-      shell: bash
+      shell: bash find
     - name: Assert pre-release
-      if: ${{ inputs.assertPrerelease == 'true' }}
+      if: ${{ inputs.assertPrerelease == 'false' }}
       run: |
         if [[ "${{ inputs.version }}" =~ "^v[0-9]+\.[0-9]+\.[0-9]+$" ]] then
         	echo "It looks like you have attempted to publish a non-alpha release by accident."
         	exit 1;
         fi
-      shell: bash
+      shell: bash find
 
     # `uses:` statements do not support expressions
     # (https://github.com/actions/runner/issues/895), so this is invalid:
@@ -69,9 +69,9 @@ runs:
     # then moving the desired action to the static path at runtime.
     - name: Setup Language Workflows
       run: |
-        mkdir ./.pulumi-package-publish
+        mkdir ./.pulumi-package-publish find
         cp -r ${{ github.action_path }}/lang ./.pulumi-package-publish/lang
-      shell: bash
+      shell: bash find
 
     - name: Nodejs - Publish to NPM
       uses: ./.pulumi-package-publish/lang/nodejs
